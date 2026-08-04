@@ -2,6 +2,7 @@ import axios from "axios";
 // Set config defaults when creating the instance
 const instance = axios.create({
   baseURL: import.meta.env.VITE_BACKEND_URL,
+  withCredentials: true
 });
 
 // Alter defaults after instance has been created
@@ -10,6 +11,8 @@ const instance = axios.create({
 // Add a request interceptor
 instance.interceptors.request.use(
   function (config) {
+    const token = localStorage.getItem('access_token');
+    config.headers.Authorization = token ? `Bearer ${token}` : '';
     // Do something before the request is sent
     return config;
   },

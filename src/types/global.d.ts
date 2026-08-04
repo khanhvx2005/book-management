@@ -11,4 +11,36 @@ declare global {
     email: string,
     fullName: string
   }
+
+  interface ILogin {
+    access_token: string,
+    user: {
+      email: string,
+      phone: string,
+      fullName: string,
+      role: string,
+      avatar: string,
+      id: string
+    }
+  }
+
+  interface IUser {
+    id: string,
+    email: string,
+    phone: string,
+    fullName: string,
+    role: string,
+    avatar: string
+  }
+
+  interface IFetchAccount {
+    user: {
+      id: string,
+      email: string,
+      phone: string,
+      fullName: string,
+      role: string,
+      avatar: string
+    }
+  }
 }
