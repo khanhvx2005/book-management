@@ -11,7 +11,7 @@ const LoginPage = () => {
   const { message, notification } = App.useApp();
   const navigate = useNavigate();
   const [loadings, setLoadings] = useState<boolean>(false);
-  const { setUser, setIsAuthenticated } = useCurrentApp();
+  const { setIsAuthenticated } = useCurrentApp();
   type FieldType = {
     email: string;
     password: string;

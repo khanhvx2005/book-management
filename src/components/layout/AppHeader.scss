@@ -1,0 +1,112 @@
+.app-header-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 40px;
+  background-color: #ffffff;
+  border-bottom: 1px solid #f0f0f0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+
+  /* Logo */
+  .header-logo {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    color: #40a9ff;
+    /* Màu xanh lơ nhạt giống trong ảnh */
+
+    .logo-icon {
+      font-size: 28px;
+      margin-right: 8px;
+    }
+
+    .logo-text {
+      font-size: 20px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+    }
+  }
+
+  /* Search Bar */
+  .header-search {
+    flex: 1;
+    max-width: 600px;
+    /* Độ rộng thanh search */
+    margin: 0 40px;
+
+    .search-input {
+      border-radius: 6px;
+      padding-top: 6px;
+      padding-bottom: 6px;
+
+      .search-icon {
+        color: #8c8c8c;
+        font-size: 16px;
+        margin-right: 6px;
+      }
+
+      input {
+        color: #595959;
+
+        &::placeholder {
+          color: #bfbfbf;
+        }
+      }
+    }
+  }
+
+  /* Actions (Cart & Avatar) */
+  .header-actions {
+    display: flex;
+    align-items: center;
+
+    .cart-badge {
+      cursor: pointer;
+      margin-right: 16px;
+
+      .cart-icon {
+        font-size: 26px;
+        color: #595959;
+        /* Màu xanh nhạt/xám cho giỏ hàng */
+        transition: color 0.3s;
+
+        &:hover {
+          color: #40a9ff;
+        }
+      }
+
+      /* Custom màu cho Badge */
+      .ant-scroll-number {
+        background-color: #ff7875;
+        /* Màu đỏ nhạt hơi hồng giống ảnh */
+        box-shadow: none;
+      }
+    }
+
+    .user-profile {
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+      padding: 4px 8px;
+      border-radius: 6px;
+      transition: background-color 0.3s ease;
+
+      &:hover {
+        background-color: #f5f5f5;
+      }
+
+      .user-avatar {
+        background-color: #f0f2f5;
+      }
+
+      .user-name {
+        margin-left: 10px;
+        font-weight: 500;
+        color: #8c8c8c;
+        /* Chữ màu xám nhẹ giống ảnh */
+        font-size: 15px;
+      }
+    }
+  }
+}

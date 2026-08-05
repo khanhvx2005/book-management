@@ -22,4 +22,16 @@ const fetchAccountApi = () => {
 
   return axios.get<IBackEndRes<IFetchAccount>>(BACKEND_URL);
 }
-export { registerUserApi, loginUserApi, fetchAccountApi }
+
+const logoutApi = () => {
+  const BACKEND_URL = "/api/v1/auth/logout";
+
+  return axios.post<IBackEndRes<IRegister>>(BACKEND_URL)
+}
+
+const getUsersApi = (current: number, pageSize: number) => {
+  const BACKEND_URL = `/api/v1/user?current=${current}&pageSize=${pageSize}`;
+
+  return axios.get<IBackEndRes<IModelPaginate<IUserTable>>>(BACKEND_URL)
+}
+export { registerUserApi, loginUserApi, fetchAccountApi, logoutApi, getUsersApi }

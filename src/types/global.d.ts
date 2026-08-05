@@ -6,6 +6,16 @@ declare global {
     error?: string | string[]
     data?: T
   }
+
+  interface IModelPaginate<T> {
+    meta: {
+      current: number,
+      pageSize: number,
+      pages: number,
+      total: number
+    },
+    result: T[]
+  }
   interface IRegister {
     _id: string,
     email: string,
@@ -42,5 +52,17 @@ declare global {
       role: string,
       avatar: string
     }
+  }
+
+  interface IUserTable {
+    _id: string,
+    fullName: string
+    email: string,
+    phone: string,
+    role: string,
+    avatar: string,
+    isActive: boolean,
+    createdAt: Date,
+    updatedAt: Date,
   }
 }
