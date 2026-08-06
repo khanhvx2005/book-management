@@ -2,78 +2,90 @@ import { getUsersApi } from '@/services/axios';
 import { dateRangeValidate } from '@/services/helper';
 import { DeleteOutlined, EditOutlined, PlusOutlined } from '@ant-design/icons';
 import type { ActionType, ProColumns } from '@ant-design/pro-components';
-import { ProTable, TableDropdown } from '@ant-design/pro-components';
-import { Button, Space, Tag } from 'antd';
+import { ProTable } from '@ant-design/pro-components';
+import { Button } from 'antd';
 import { useRef, useState } from 'react';
+
+import UserDetail from './user.detail';
+
 type TSearch = {
   fullName: string,
   email: string,
   createdAt: string,
   createdAtRange: string
 }
-const columns: ProColumns<IUserTable>[] = [
-  {
-    dataIndex: 'index',
-    valueType: 'indexBorder',
-    width: 48,
-  },
-  {
-    title: 'ID',
-    dataIndex: '_id',
-    search: false,
 
-    render(dom, entity, index, action, schema) {
-      return (
-        <a href="#">{entity._id}</a>
-      )
-    },
-  },
-  {
-    title: 'Full Name',
-    dataIndex: 'fullName',
-  },
-  {
-    title: 'Email',
-    dataIndex: 'email',
-    copyable: true
-  },
-  {
-    title: 'CreatedAt',
-    dataIndex: 'createdAt',
-    valueType: "date",
-    sorter: true,
-    hideInSearch: true
-  },
-  {
-    title: 'CreatedAt',
-    dataIndex: 'createdAtRange',
-    valueType: "dateRange",
-    hideInTable: true
-  },
-  {
-    title: 'Action',
-    hideInSearch: true,
-    render(dom, entity, index, action, schema) {
-      return (
-        <>
-          <EditOutlined style={{ color: "orange", cursor: "pointer", marginRight: "15px" }} />
-          <DeleteOutlined style={{ color: "red", cursor: "pointer" }} />
-        </>
-      )
-    },
-
-  }
-
-];
 
 const TableUser = () => {
+
   const actionRef = useRef<ActionType>();
+  const [isOpenDrawer, setIsOpenDrawer] = useState(false);
+  const [userDetail, setUserDetail] = useState<IUserTable | null>(null);
   const [meta, setMeta] = useState({
     current: 1,
     pageSize: 5,
     pages: 0,
     total: 0
   })
+
+  const columns: ProColumns<IUserTable>[] = [
+    {
+      dataIndex: 'index',
+      valueType: 'indexBorder',
+      width: 48,
+    },
+    {
+      title: 'ID',
+      dataIndex: '_id',
+      search: false,
+
+      render(dom, entity, index, action, schema) {
+        return (
+          <a href="#" onClick={() => {
+            setUserDetail(entity)
+            setIsOpenDrawer(true)
+          }}>{entity._id}</a>
+        )
+      },
+    },
+    {
+      title: 'Full Name',
+      dataIndex: 'fullName',
+    },
+    {
+      title: 'Email',
+      dataIndex: 'email',
+      copyable: true
+    },
+    {
+      title: 'CreatedAt',
+      dataIndex: 'createdAt',
+      valueType: "date",
+      sorter: true,
+      hideInSearch: true
+    },
+    {
+      title: 'CreatedAt',
+      dataIndex: 'createdAtRange',
+      valueType: "dateRange",
+      hideInTable: true
+    },
+    {
+      title: 'Action',
+      hideInSearch: true,
+      render(dom, entity, index, action, schema) {
+        return (
+          <>
+            <EditOutlined style={{ color: "orange", cursor: "pointer", marginRight: "15px" }} />
+            <DeleteOutlined style={{ color: "red", cursor: "pointer" }} />
+          </>
+        )
+      },
+
+    }
+
+  ];
+
 
   // request trong Protable không chạy lại mỗi khi component Table re-render // Hoạt động giống hàm useEffect(() , [gia-tri])
   return (
@@ -145,7 +157,12 @@ const TableUser = () => {
 
         ]}
       />
-
+      <UserDetail
+        isOpenDrawer={isOpenDrawer}
+        setIsOpenDrawer={setIsOpenDrawer}
+        userDetail={userDetail}
+        setUserDetail={setUserDetail}
+      />
 
     </>
   );

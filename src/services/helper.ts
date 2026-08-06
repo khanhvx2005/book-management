@@ -8,3 +8,4 @@ export const dateRangeValidate = (dateRange: any) => {
   const endDate = moment(dateRange[1], 'YYYY-MM-DD').endOf('day').toDate();
   return [startDate, endDate]
 }
+
