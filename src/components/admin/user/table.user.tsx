@@ -1,10 +1,16 @@
 import { getUsersApi } from '@/services/axios';
+import { dateRangeValidate } from '@/services/helper';
 import { DeleteOutlined, EditOutlined, PlusOutlined } from '@ant-design/icons';
 import type { ActionType, ProColumns } from '@ant-design/pro-components';
 import { ProTable, TableDropdown } from '@ant-design/pro-components';
 import { Button, Space, Tag } from 'antd';
 import { useRef, useState } from 'react';
-
+type TSearch = {
+  fullName: string,
+  email: string,
+  createdAt: string,
+  createdAtRange: string
+}
 const columns: ProColumns<IUserTable>[] = [
   {
     dataIndex: 'index',
@@ -34,6 +40,15 @@ const columns: ProColumns<IUserTable>[] = [
   {
     title: 'CreatedAt',
     dataIndex: 'createdAt',
+    valueType: "date",
+    sorter: true,
+    hideInSearch: true
+  },
+  {
+    title: 'CreatedAt',
+    dataIndex: 'createdAtRange',
+    valueType: "dateRange",
+    hideInTable: true
   },
   {
     title: 'Action',
@@ -63,13 +78,32 @@ const TableUser = () => {
   // request trong Protable không chạy lại mỗi khi component Table re-render // Hoạt động giống hàm useEffect(() , [gia-tri])
   return (
     <>
-      <ProTable<IUserTable>
+      <ProTable<IUserTable, TSearch>
         columns={columns}
         actionRef={actionRef}
         cardBordered
         request={async (params, sort, filter) => {
+          let query = '';
+          if (params) {
+            query += `current=${params.current}&pageSize=${params.pageSize}`;
+            if (params.fullName) {
+              query += `&fullName=/${params.fullName}/i`;
+            }
+            if (params.email) {
+              query += `&email=/${params.email}/i`;
 
-          const res = await getUsersApi(params?.current ?? 1, params?.pageSize ?? 5);
+            }
+            const createdAtRange = dateRangeValidate(params.createdAtRange);
+
+            if (createdAtRange) {
+
+              query += `&createdAt>=${createdAtRange[0]}&createdAt<=${createdAtRange[1]}`;
+
+            }
+          }
+
+          // console.log("check params >>", params)
+          const res = await getUsersApi(query);
           if (res.data) {
             setMeta(res.data.meta)
           }
