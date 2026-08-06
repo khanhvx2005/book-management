@@ -34,4 +34,16 @@ const getUsersApi = (query: any) => {
 
   return axios.get<IBackEndRes<IModelPaginate<IUserTable>>>(BACKEND_URL)
 }
-export { registerUserApi, loginUserApi, fetchAccountApi, logoutApi, getUsersApi }
+
+const createUserApi = (fullName: string, email: string, password: string, phone: string) => {
+  const BACKEND_URL = "/api/v1/user";
+
+  return axios.post<IBackEndRes<IUserTable>>(BACKEND_URL, {
+    fullName,
+    email,
+    password,
+    phone
+  })
+}
+
+export { registerUserApi, loginUserApi, fetchAccountApi, logoutApi, getUsersApi, createUserApi }

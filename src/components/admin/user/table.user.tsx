@@ -7,6 +7,7 @@ import { Button } from 'antd';
 import { useRef, useState } from 'react';
 
 import UserDetail from './user.detail';
+import ModalUser from './create.user';
 
 type TSearch = {
   fullName: string,
@@ -19,7 +20,7 @@ type TSearch = {
 const TableUser = () => {
 
   const actionRef = useRef<ActionType>();
-  const [isOpenDrawer, setIsOpenDrawer] = useState(false);
+  const [isOpenDrawer, setIsOpenDrawer] = useState<boolean>(false);
   const [userDetail, setUserDetail] = useState<IUserTable | null>(null);
   const [meta, setMeta] = useState({
     current: 1,
@@ -27,6 +28,7 @@ const TableUser = () => {
     pages: 0,
     total: 0
   })
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
   const columns: ProColumns<IUserTable>[] = [
     {
@@ -85,7 +87,9 @@ const TableUser = () => {
     }
 
   ];
-
+  const refreshTable = () => {
+    actionRef.current.reload();
+  }
 
   // request trong Protable không chạy lại mỗi khi component Table re-render // Hoạt động giống hàm useEffect(() , [gia-tri])
   return (
@@ -114,6 +118,7 @@ const TableUser = () => {
               query += `&createdAt>=${createdAtRange[0]}&createdAt<=${createdAtRange[1]}`;
 
             }
+            query += `&sort=-createdAt`;
             if (sort && sort.createdAt) {
               query += `&sort=${sort.createdAt === "ascend" ? "createdAt" : "-createdAt"}`;
             }
@@ -148,7 +153,7 @@ const TableUser = () => {
             key="button"
             icon={<PlusOutlined />}
             onClick={() => {
-              actionRef.current?.reload();
+              setIsModalOpen(true)
             }}
             type="primary"
           >
@@ -163,7 +168,11 @@ const TableUser = () => {
         userDetail={userDetail}
         setUserDetail={setUserDetail}
       />
-
+      <ModalUser
+        isModalOpen={isModalOpen}
+        setIsModalOpen={setIsModalOpen}
+        refreshTable={refreshTable}
+      />
     </>
   );
 };
