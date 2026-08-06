@@ -83,6 +83,8 @@ const TableUser = () => {
         actionRef={actionRef}
         cardBordered
         request={async (params, sort, filter) => {
+
+
           let query = '';
           if (params) {
             query += `current=${params.current}&pageSize=${params.pageSize}`;
@@ -100,6 +102,10 @@ const TableUser = () => {
               query += `&createdAt>=${createdAtRange[0]}&createdAt<=${createdAtRange[1]}`;
 
             }
+            if (sort && sort.createdAt) {
+              query += `&sort=${sort.createdAt === "ascend" ? "createdAt" : "-createdAt"}`;
+            }
+
           }
 
           // console.log("check params >>", params)
