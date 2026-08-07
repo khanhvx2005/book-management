@@ -1,6 +1,6 @@
 import { getUsersApi } from '@/services/axios';
 import { dateRangeValidate } from '@/services/helper';
-import { DeleteOutlined, EditOutlined, PlusOutlined } from '@ant-design/icons';
+import { DeleteOutlined, EditOutlined, ExportOutlined, PlusOutlined, UploadOutlined } from '@ant-design/icons';
 import type { ActionType, ProColumns } from '@ant-design/pro-components';
 import { ProTable } from '@ant-design/pro-components';
 import { Button } from 'antd';
@@ -8,6 +8,8 @@ import { useRef, useState } from 'react';
 
 import UserDetail from './user.detail';
 import ModalUser from './create.user';
+import ImportUser from './data/import.user';
+import { CSVLink } from "react-csv";
 
 type TSearch = {
   fullName: string,
@@ -28,8 +30,9 @@ const TableUser = () => {
     pages: 0,
     total: 0
   })
-  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-
+  const [isModalOpenCreate, setIsModalOpenCreate] = useState<boolean>(false);
+  const [isModalOpenImport, setIsModalOpenImport] = useState(false);
+  const [currentDataTable, setCurrentDataTable] = useState<IUserTable[]>([]);
   const columns: ProColumns<IUserTable>[] = [
     {
       dataIndex: 'index',
@@ -118,9 +121,11 @@ const TableUser = () => {
               query += `&createdAt>=${createdAtRange[0]}&createdAt<=${createdAtRange[1]}`;
 
             }
-            query += `&sort=-createdAt`;
+
             if (sort && sort.createdAt) {
               query += `&sort=${sort.createdAt === "ascend" ? "createdAt" : "-createdAt"}`;
+            } else {
+              query += `&sort=-createdAt`;
             }
 
           }
@@ -129,6 +134,7 @@ const TableUser = () => {
           const res = await getUsersApi(query);
           if (res.data) {
             setMeta(res.data.meta)
+            setCurrentDataTable(res.data.result);
           }
           return {
             // data: data.data,
@@ -149,16 +155,24 @@ const TableUser = () => {
         }}
         headerTitle="Table user"
         toolBarRender={() => [
-          <Button
-            key="button"
-            icon={<PlusOutlined />}
-            onClick={() => {
-              setIsModalOpen(true)
-            }}
-            type="primary"
-          >
-            Add new
-          </Button>
+          <>
+            <CSVLink filename={'user-table.csv'} data={currentDataTable}><Button type='primary' icon={<ExportOutlined />}>Export</Button></CSVLink>
+
+
+
+            <Button onClick={() => setIsModalOpenImport(true)} type='primary' icon={<UploadOutlined />}>Import</Button>
+
+            <Button
+              key="button"
+              icon={<PlusOutlined />}
+              onClick={() => {
+                setIsModalOpenCreate(true)
+              }}
+              type="primary"
+            >
+              Add new
+            </Button>
+          </>
 
         ]}
       />
@@ -169,9 +183,15 @@ const TableUser = () => {
         setUserDetail={setUserDetail}
       />
       <ModalUser
-        isModalOpen={isModalOpen}
-        setIsModalOpen={setIsModalOpen}
+        isModalOpenCreate={isModalOpenCreate}
+        setIsModalOpenCreate={setIsModalOpenCreate}
         refreshTable={refreshTable}
+      />
+      <ImportUser
+        isModalOpenImport={isModalOpenImport}
+        setIsModalOpenImport={setIsModalOpenImport}
+        refreshTable={refreshTable}
+
       />
     </>
   );

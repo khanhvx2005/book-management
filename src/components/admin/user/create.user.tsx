@@ -3,8 +3,8 @@ import { App, Button, Form, Input, Modal } from "antd";
 import type { FormProps } from 'antd';
 
 interface IProps {
-  isModalOpen: boolean,
-  setIsModalOpen: (v: boolean) => void;
+  isModalOpenCreate: boolean,
+  setIsModalOpenCreate: (v: boolean) => void;
   refreshTable: () => void;
 }
 type FieldType = {
@@ -16,7 +16,7 @@ type FieldType = {
 
 
 const ModalUser = (props: IProps) => {
-  const { isModalOpen, setIsModalOpen, refreshTable } = props;
+  const { isModalOpenCreate, setIsModalOpenCreate, refreshTable } = props;
   const [form] = Form.useForm();
   const { message, notification } = App.useApp();
 
@@ -24,7 +24,7 @@ const ModalUser = (props: IProps) => {
     const res = await createUserApi(values.fullName, values.email, values.password, values.phone);
     if (res.data) {
       message.success('Tạo mới user thành công!');
-      setIsModalOpen(false);
+      setIsModalOpenCreate(false);
       form.resetFields(); // Reset dữ liệu
       refreshTable(); // Load lại danh sách 
     } else {
@@ -44,10 +44,10 @@ const ModalUser = (props: IProps) => {
       <Modal
         title="Thêm mới user"
         closable={{ 'aria-label': 'Custom Close Button' }}
-        open={isModalOpen}
+        open={isModalOpenCreate}
         onOk={() => form.submit()}
         onCancel={() => {
-          setIsModalOpen(false)
+          setIsModalOpenCreate(false)
           form.resetFields()
         }}
         okText={"Thêm mới"}
