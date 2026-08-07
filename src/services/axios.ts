@@ -67,4 +67,10 @@ const updateUserApi = (id: string, fullName: string, phone: string) => {
   })
 }
 
-export { registerUserApi, loginUserApi, fetchAccountApi, logoutApi, getUsersApi, createUserApi, bulkCreateUserApi, updateUserApi }
+const deleteUserApi = (id: string) => {
+  const BACKEND_URL = `/api/v1/user/${id}`;
+  return axios.delete<IBackEndRes<IRegister>>(BACKEND_URL);
+
+}
+
+export { registerUserApi, loginUserApi, fetchAccountApi, logoutApi, getUsersApi, createUserApi, bulkCreateUserApi, updateUserApi, deleteUserApi }

@@ -1,9 +1,9 @@
-import { getUsersApi } from '@/services/axios';
+import { deleteUserApi, getUsersApi } from '@/services/axios';
 import { dateRangeValidate } from '@/services/helper';
 import { DeleteOutlined, EditOutlined, ExportOutlined, PlusOutlined, UploadOutlined } from '@ant-design/icons';
 import type { ActionType, ProColumns } from '@ant-design/pro-components';
 import { ProTable } from '@ant-design/pro-components';
-import { Button } from 'antd';
+import { App, Button, Popconfirm } from 'antd';
 import { useRef, useState } from 'react';
 
 import UserDetail from './user.detail';
@@ -11,6 +11,7 @@ import ModalUser from './create.user';
 import ImportUser from './data/import.user';
 import { CSVLink } from "react-csv";
 import UpdateUser from './update.user';
+import type { PopconfirmProps } from 'antd';
 
 type TSearch = {
   fullName: string,
@@ -20,6 +21,9 @@ type TSearch = {
 }
 
 
+
+const cancel: PopconfirmProps['onCancel'] = (e) => {
+};
 const TableUser = () => {
 
   const actionRef = useRef<ActionType>();
@@ -36,6 +40,8 @@ const TableUser = () => {
   const [currentDataTable, setCurrentDataTable] = useState<IUserTable[]>([]);
   const [isModalOpenUpdate, setIsModalOpenUpdate] = useState<boolean>(false);
   const [dataModalUpdate, setDataModalUpdate] = useState<IUserTable | null>(null);
+  const [isDeleteUser, setIsDeleteUser] = useState<boolean>(false);
+  const { message, notification } = App.useApp();
   const columns: ProColumns<IUserTable>[] = [
     {
       dataIndex: 'index',
@@ -92,7 +98,21 @@ const TableUser = () => {
               }}
 
             />
-            <DeleteOutlined style={{ color: "red", cursor: "pointer" }} />
+            <Popconfirm
+              placement="left"
+              title="Xóa người dùng"
+              description="Bạn có chắc chắn muốn xóa người dùng?"
+              onConfirm={() => handleConfirm(entity._id)}
+              onCancel={cancel}
+              okText="Yes"
+              cancelText="No"
+              okButtonProps={{
+                loading: isDeleteUser
+              }}
+            >
+              <DeleteOutlined style={{ color: "red", cursor: "pointer" }} />
+            </Popconfirm>
+
           </>
         )
       },
@@ -102,6 +122,20 @@ const TableUser = () => {
   ];
   const refreshTable = () => {
     actionRef.current.reload();
+  }
+  const handleConfirm = async (id: string) => {
+    setIsDeleteUser(true);
+    const res = await deleteUserApi(id);
+    if (res.data) {
+      message.success('Xóa người dùng thành công!');
+      refreshTable();
+    } else {
+      notification.error({
+        message: "Có lỗi xảy ra!",
+        description: res.message
+      })
+    }
+    setIsDeleteUser(false);
   }
   // request trong Protable không chạy lại mỗi khi component Table re-render // Hoạt động giống hàm useEffect(() , [gia-tri])
   return (
