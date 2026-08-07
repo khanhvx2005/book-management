@@ -96,16 +96,14 @@ const router = createBrowserRouter([
   },
 ]);
 createRoot(document.getElementById('root')!).render(
-  <StrictMode>
-    {/* <App /> */}
-    <App>
-      <AppProvider>
-        <ConfigProvider locale={enUS}>
-          <ProConfigProvider intl={enUSIntl}>
-            <RouterProvider router={router} />
-          </ProConfigProvider>
-        </ConfigProvider>
-      </AppProvider>
-    </App>
-  </StrictMode>,
+
+  <App>
+    <AppProvider>
+      <ConfigProvider locale={enUS}>
+        <ProConfigProvider intl={enUSIntl}>
+          <RouterProvider router={router} />
+        </ProConfigProvider>
+      </ConfigProvider>
+    </AppProvider>
+  </App>
 )

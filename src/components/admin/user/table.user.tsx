@@ -10,6 +10,7 @@ import UserDetail from './user.detail';
 import ModalUser from './create.user';
 import ImportUser from './data/import.user';
 import { CSVLink } from "react-csv";
+import UpdateUser from './update.user';
 
 type TSearch = {
   fullName: string,
@@ -33,6 +34,8 @@ const TableUser = () => {
   const [isModalOpenCreate, setIsModalOpenCreate] = useState<boolean>(false);
   const [isModalOpenImport, setIsModalOpenImport] = useState(false);
   const [currentDataTable, setCurrentDataTable] = useState<IUserTable[]>([]);
+  const [isModalOpenUpdate, setIsModalOpenUpdate] = useState<boolean>(false);
+  const [dataModalUpdate, setDataModalUpdate] = useState<IUserTable | null>(null);
   const columns: ProColumns<IUserTable>[] = [
     {
       dataIndex: 'index',
@@ -81,7 +84,14 @@ const TableUser = () => {
       render(dom, entity, index, action, schema) {
         return (
           <>
-            <EditOutlined style={{ color: "orange", cursor: "pointer", marginRight: "15px" }} />
+            <EditOutlined
+              style={{ color: "orange", cursor: "pointer", marginRight: "15px" }}
+              onClick={() => {
+                setIsModalOpenUpdate(true)
+                setDataModalUpdate(entity)
+              }}
+
+            />
             <DeleteOutlined style={{ color: "red", cursor: "pointer" }} />
           </>
         )
@@ -93,7 +103,6 @@ const TableUser = () => {
   const refreshTable = () => {
     actionRef.current.reload();
   }
-
   // request trong Protable không chạy lại mỗi khi component Table re-render // Hoạt động giống hàm useEffect(() , [gia-tri])
   return (
     <>
@@ -191,7 +200,13 @@ const TableUser = () => {
         isModalOpenImport={isModalOpenImport}
         setIsModalOpenImport={setIsModalOpenImport}
         refreshTable={refreshTable}
-
+      />
+      <UpdateUser
+        isModalOpenUpdate={isModalOpenUpdate}
+        setIsModalOpenUpdate={setIsModalOpenUpdate}
+        dataModalUpdate={dataModalUpdate}
+        setDataModalUpdate={setDataModalUpdate}
+        refreshTable={refreshTable}
       />
     </>
   );

@@ -57,4 +57,14 @@ const bulkCreateUserApi = (data: {
   return axios.post<IBackEndRes<IResponseImport>>(BACKEND_URL, data)
 }
 
-export { registerUserApi, loginUserApi, fetchAccountApi, logoutApi, getUsersApi, createUserApi, bulkCreateUserApi }
+const updateUserApi = (id: string, fullName: string, phone: string) => {
+  const BACKEND_URL = "/api/v1/user";
+
+  return axios.put<IBackEndRes<IUserTable>>(BACKEND_URL, {
+    _id: id,
+    fullName: fullName,
+    phone: phone
+  })
+}
+
+export { registerUserApi, loginUserApi, fetchAccountApi, logoutApi, getUsersApi, createUserApi, bulkCreateUserApi, updateUserApi }
